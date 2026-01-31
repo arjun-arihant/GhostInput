@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto Key Presser Pro</title>
+  <link rel="stylesheet" href="popup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="4" width="20" height="16" rx="2" />
+            <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M6 16h12" />
+          </svg>
+        </div>
+        <h1>Auto Key Presser <span class="badge-pro">PRO</span></h1>
+      </div>
+      <button id="globalToggle" class="btn-icon-toggle" title="Toggle All Actions">
+        <svg class="icon-power" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
+          <line x1="12" y1="2" x2="12" y2="12" />
+        </svg>
+      </button>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="actions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+        </svg>
+        <span>Actions</span>
+      </button>
+      <button class="nav-tab" data-tab="profiles">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span>Profiles</span>
+      </button>
+      <button class="nav-tab" data-tab="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        </svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+
+    <!-- Content Area -->
+    <main class="content-area">
+
+      <!-- Actions Tab -->
+      <section id="actions-tab" class="tab-panel active">
+        <div class="card add-action-card">
+          <form id="addActionForm">
+            <div class="form-row">
+              <input type="text" id="actionName" class="input-text" placeholder="Action Name (e.g., Farm XP)" required>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Type</label>
+                <select id="actionType" class="input-select">
+                  <option value="key">Key Press</option>
+                  <option value="mouse">Mouse Click</option>
+                </select>
+              </div>
+
+              <div class="form-group" id="keySelectGroup">
+                <label>Key</label>
+                <select id="keySelect" class="input-select">
+                  <optgroup label="Standard">
+                    <option value="Space">Space</option>
+                    <option value="Enter">Enter</option>
+                    <option value="Tab">Tab</option>
+                    <option value="Escape">Escape</option>
+                  </optgroup>
+                  <optgroup label="Letters">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                    <option value="H">H</option>
+                    <option value="I">I</option>
+                    <option value="J">J</option>
+                    <option value="K">K</option>
+                    <option value="L">L</option>
+                    <option value="M">M</option>
+                    <option value="N">N</option>
+                    <option value="O">O</option>
+                    <option value="P">P</option>
+                    <option value="Q">Q</option>
+                    <option value="R">R</option>
+                    <option value="S">S</option>
+                    <option value="T">T</option>
+                    <option value="U">U</option>
+                    <option value="V">V</option>
+                    <option value="W">W</option>
+                    <option value="X">X</option>
+                    <option value="Y">Y</option>
+                    <option value="Z">Z</option>
+                  </optgroup>
+                  <optgroup label="Numbers">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                  </optgroup>
+                  <optgroup label="Navigation">
+                    <option value="ArrowUp">↑ Up</option>
+                    <option value="ArrowDown">↓ Down</option>
+                    <option value="ArrowLeft">← Left</option>
+                    <option value="ArrowRight">→ Right</option>
+                  </optgroup>
+                  <optgroup label="Function">
+                    <option value="F1">F1</option>
+                    <option value="F2">F2</option>
+                    <option value="F3">F3</option>
+                    <option value="F4">F4</option>
+                    <option value="F5">F5</option>
+                    <option value="F6">F6</option>
+                    <option value="F7">F7</option>
+                    <option value="F8">F8</option>
+                    <option value="F9">F9</option>
+                    <option value="F10">F10</option>
+                    <option value="F11">F11</option>
+                    <option value="F12">F12</option>
+                  </optgroup>
+                </select>
+              </div>
+
+              <div class="form-group hidden" id="mouseSelectGroup">
+                <label>Click</label>
+                <select id="mouseSelect" class="input-select">
+                  <option value="leftClick">Left Click</option>
+                  <option value="rightClick">Right Click</option>
+                  <option value="middleClick">Middle</option>
+                  <option value="doubleClick">Double</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group modifiers-group">
+              <label class="sub-label">Modifiers</label>
+              <div class="toggle-group">
+                <button type="button" class="btn-toggle modifier-btn" data-modifier="Ctrl">Ctrl</button>
+                <button type="button" class="btn-toggle modifier-btn" data-modifier="Alt">Alt</button>
+                <button type="button" class="btn-toggle modifier-btn" data-modifier="Shift">Shift</button>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Interval</label>
+                <input type="number" id="interval" class="input-text" min="1" value="10" required>
+              </div>
+              <div class="form-group">
+                <label>Unit</label>
+                <select id="timeUnit" class="input-select">
+                  <option value="seconds">secs</option>
+                  <option value="minutes">mins</option>
+                  <option value="hours">hrs</option>
+                  <option value="milliseconds">ms</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Advanced Toggle -->
+            <button type="button" id="advancedToggle" class="btn-text-icon">
+              <span>Advanced Options</span>
+              <svg viewBox="0 0 24 24" fill="none" class="icon-chevron" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+
+            <div id="advancedOptions" class="advanced-panel hidden">
+              <!-- Randomization -->
+              <div class="option-row">
+                <label class="switch">
+                  <input type="checkbox" id="randomize">
+                  <span class="slider"></span>
+                </label>
+                <span class="option-label">Randomize Interval</span>
+              </div>
+
+              <div id="randomizeSettings" class="form-grid hidden">
+                <div class="form-group">
+                  <label>Min</label>
+                  <input type="number" id="randomizeMin" class="input-text" placeholder="Min" min="0">
+                </div>
+                <div class="form-group">
+                  <label>Max</label>
+                  <input type="number" id="randomizeMax" class="input-text" placeholder="Max" min="0">
+                </div>
+              </div>
+
+              <!-- Schedule & URL -->
+              <div class="form-group">
+                <label>Target URL (Optional)</label>
+                <input type="text" id="urlFilter" class="input-text" placeholder="e.g. google.com">
+              </div>
+
+              <!-- Stop Condition -->
+              <div class="form-group">
+                <label>Stop After (0 = Infinite)</label>
+                <div class="input-group">
+                  <input type="number" id="repeatLimit" class="input-text" min="0" placeholder="Repeats">
+                  <span class="separator">or</span>
+                  <input type="number" id="timeLimit" class="input-text" min="0" placeholder="Minutes">
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Add Action
+            </button>
+          </form>
+        </div>
+
+        <div id="actionsList" class="actions-list">
+          <!-- Actions will be injected here -->
+          <div id="emptyState" class="empty-state">
+            <div class="empty-icon">⚡</div>
+            <p>No active actions</p>
+            <span>Create one above to get started</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Profiles Tab -->
+      <section id="profiles-tab" class="tab-panel">
+        <div class="profiles-header">
+          <button id="saveProfileBtn" class="btn-secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+            </svg>
+            Save Current State
+          </button>
+        </div>
+        <div id="profilesList" class="profiles-list">
+          <!-- Profiles injected here -->
+        </div>
+      </section>
+
+      <!-- Settings Tab -->
+      <section id="settings-tab" class="tab-panel">
+        <div class="card settings-card">
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Notifications</h3>
+              <p>Get notified when actions start/stop</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="notificationsSetting" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>On-Screen Overlay</h3>
+              <p>Show countdown timer on page</p>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="showOverlaySetting" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Theme</h3>
+              <p>Switch between dark and light modes</p>
+            </div>
+            <button id="themeToggle" class="btn-theme" title="Toggle theme">
+              <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+              <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Data Management</h3>
+              <p>Backup or restore your configurations</p>
+            </div>
+            <div class="data-actions">
+              <button id="exportBtn" class="btn-outline">Export</button>
+              <button id="importBtn" class="btn-outline">Import</button>
+              <input type="file" id="importFile" accept=".json" hidden>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-footer">
+          <p>Auto Key Presser Pro v1.2.0</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="editActionModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Edit Action</h3>
+        <button id="cancelEditBtn" class="btn-close">×</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editActionId">
+
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="editActionName" class="input-text">
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Type</label>
+            <select id="editActionType" class="input-select">
+              <option value="key">Key</option>
+              <option value="mouse">Mouse</option>
+            </select>
+          </div>
+          <div class="form-group" id="editKeySelectGroup">
+            <label>Key</label>
+            <select id="editKeySelect" class="input-select">
+              <!-- Same options as main form, populated by JS ideally or duplicated -->
+              <!-- Simplified for brevity, assume JS handles population or simple standard set -->
+              <option value="Space">Space</option>
+              <option value="A">A</option>
+              <!-- ... will populate fully in HTML or assumes existing options ... -->
+              <!-- For this file write, I'll assume we need to re-add them or use JS to populate to save space? 
+                    No, I should verify if pop.js populates them. pop.js does NOT populate them, it assumes they are in HTML.
+                    I must duplicate the options list here for the edit modal.
+               -->
+              <optgroup label="Standard">
+                <option value="Space">Space</option>
+                <option value="Enter">Enter</option>
+                <option value="Tab">Tab</option>
+                <option value="Escape">Escape</option>
+              </optgroup>
+              <optgroup label="Letters">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+                <option value="F">F</option>
+                <option value="G">G</option>
+                <option value="H">H</option>
+                <option value="I">I</option>
+                <option value="J">J</option>
+                <option value="K">K</option>
+                <option value="L">L</option>
+                <option value="M">M</option>
+                <option value="N">N</option>
+                <option value="O">O</option>
+                <option value="P">P</option>
+                <option value="Q">Q</option>
+                <option value="R">R</option>
+                <option value="S">S</option>
+                <option value="T">T</option>
+                <option value="U">U</option>
+                <option value="V">V</option>
+                <option value="W">W</option>
+                <option value="X">X</option>
+                <option value="Y">Y</option>
+                <option value="Z">Z</option>
+              </optgroup>
+              <optgroup label="Numbers">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+              </optgroup>
+              <optgroup label="Navigation">
+                <option value="ArrowUp">↑ Up</option>
+                <option value="ArrowDown">↓ Down</option>
+                <option value="ArrowLeft">← Left</option>
+                <option value="ArrowRight">→ Right</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="form-group hidden" id="editMouseSelectGroup">
+            <label>Click</label>
+            <select id="editMouseSelect" class="input-select">
+              <option value="leftClick">Left Click</option>
+              <option value="rightClick">Right Click</option>
+              <option value="middleClick">Middle</option>
+              <option value="doubleClick">Double</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group edit-modifiers-group">
+          <label class="sub-label">Modifiers</label>
+          <div class="toggle-group">
+            <button type="button" class="btn-toggle edit-modifier-btn" data-modifier="Ctrl">Ctrl</button>
+            <button type="button" class="btn-toggle edit-modifier-btn" data-modifier="Alt">Alt</button>
+            <button type="button" class="btn-toggle edit-modifier-btn" data-modifier="Shift">Shift</button>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Interval</label>
+            <input type="number" id="editInterval" class="input-text" min="1">
+          </div>
+          <div class="form-group">
+            <label>Unit</label>
+            <select id="editTimeUnit" class="input-select">
+              <option value="seconds">secs</option>
+              <option value="minutes">mins</option>
+              <option value="hours">hrs</option>
+              <option value="milliseconds">ms</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="option-row">
+          <label class="switch">
+            <input type="checkbox" id="editRandomize">
+            <span class="slider"></span>
+          </label>
+          <span class="option-label">Randomize</span>
+        </div>
+
+        <div id="editRandomizeSettings" class="form-grid hidden">
+          <div class="form-group">
+            <label>Min</label>
+            <input type="number" id="editRandomizeMin" class="input-text" min="0">
+          </div>
+          <div class="form-group">
+            <label>Max</label>
+            <input type="number" id="editRandomizeMax" class="input-text" min="0">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Filter URL</label>
+          <input type="text" id="editUrlFilter" class="input-text">
+        </div>
+
+        <div class="form-group">
+          <label>Limits</label>
+          <div class="input-group">
+            <input type="number" id="editRepeatLimit" class="input-text" placeholder="Repeats">
+            <span class="separator">or</span>
+            <input type="number" id="editTimeLimit" class="input-text" placeholder="Minutes">
+          </div>
+        </div>
+
+        <button id="confirmEditBtn" class="btn-primary">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div id="saveProfileModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Save Profile</h3>
+        <button id="cancelProfileBtn" class="btn-close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Profile Name</label>
+          <input type="text" id="profileName" class="input-text" placeholder="e.g. Work Morning">
+        </div>
+        <button id="confirmSaveProfileBtn" class="btn-primary">Save Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+  <script src="popup.js" type="module"></script>
+</body>
+
+</html>

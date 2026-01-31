@@ -1,0 +1,48 @@
+# OS & System Files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs and databases
+*.log
+*.sqlite
+
+# NodeJS (if added later)
+node_modules/
+dist/
+build/
+coverage/
+
+# IDE & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.local
+
+# Extension specific
+*.pem
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.manifest
+.mypy_cache/
+.pytest_cache/
+venv/
+.venv/
+env/
+.env/
+
+# General
+*.bak
+*.tmp
+*.temp
+.DS_Store
+
+# AI Tools
+.agent/
