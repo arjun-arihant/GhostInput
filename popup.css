@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   Auto Key Presser Pro - Refined Design System
+   GhostInput - Refined Design System
    Dark/Light Theme Support with Smooth Transitions
    ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -111,20 +111,23 @@ body {
 }
 
 .logo-icon {
-  width: 34px;
-  height: 34px;
-  background: linear-gradient(135deg, var(--accent), #8B5CF6);
+  width: 32px;
+  height: 32px;
+  /* Removed background & shadow to avoid conflict with the new image icon */
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  box-shadow: 0 0 20px var(--accent-glow);
+  flex-shrink: 0;
+  /* Prevent shrinking */
 }
 
-.logo-icon svg {
-  width: 18px;
-  height: 18px;
+.logo-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  /* Add shadow to image instead */
 }
 
 h1 {
@@ -132,6 +135,8 @@ h1 {
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--text-primary);
+  white-space: nowrap;
+  /* Prevent rebranding from wrapping */
 }
 
 .badge-pro {

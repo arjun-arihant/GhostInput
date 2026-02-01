@@ -1,24 +1,24 @@
 {
   "manifest_version": 3,
-  "name": "Auto Key Presser Pro",
+  "name": "GhostInput",
   "version": "1.1.0",
-  "description": "Schedule automated key presses and mouse clicks at custom intervals with advanced features",
-  "author": "Auto Key Presser Pro",
+  "description": "GhostInput: Schedule automated key presses and mouse clicks at custom intervals with advanced features",
+  "author": "GhostInput",
   "icons": {
-    "16": "icons/icon16.png",
-    "32": "icons/icon32.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/ghost16.png",
+    "32": "icons/ghost32.png",
+    "48": "icons/ghost48.png",
+    "128": "icons/ghost128.png"
   },
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "icons/icon16.png",
-      "32": "icons/icon32.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
+      "16": "icons/ghost16.png",
+      "32": "icons/ghost32.png",
+      "48": "icons/ghost48.png",
+      "128": "icons/ghost128.png"
     },
-    "default_title": "Auto Key Presser Pro"
+    "default_title": "GhostInput"
   },
   "permissions": [
     "storage",

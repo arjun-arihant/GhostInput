@@ -1,8 +1,8 @@
-# Contributing to Auto Key Presser Pro
+# Contributing to GhostInput
 
 First off, thanks for taking the time to contribute! 🎉
 
-The following is a set of guidelines for contributing to Auto Key Presser Pro. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
+The following is a set of guidelines for contributing to **GhostInput**. These are mostly guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
 ## 🛠️ Development Setup
 

@@ -46,3 +46,6 @@ env/
 
 # AI Tools
 .agent/
+
+#icons
+icons/spares

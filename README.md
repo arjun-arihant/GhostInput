@@ -1,11 +1,11 @@
-# Auto Key Presser Pro
+# GhostInput
 
 > Schedule automated key presses and mouse clicks with advanced timing, multi-tab support, and a sleek modern overlay.
 
 ![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-**Auto Key Presser Pro** is a powerful Chrome extension designed to automate repetitive browser tasks. Whether you're gaming, testing, or performing data entry, this extension allows you to simulate keyboard and mouse inputs at precise intervals across multiple tabs simultaneously.
+**GhostInput** is a powerful Chrome extension designed to automate repetitive browser tasks. Whether you're gaming, testing, or performing data entry, this extension allows you to simulate keyboard and mouse inputs at precise intervals across multiple tabs simultaneously.
 
 ---
 
@@ -31,7 +31,7 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/auto-key-presser-pro.git
+   git clone https://github.com/yourusername/ghost-input.git
    ```
 
 2. **Open Chrome Extensions**

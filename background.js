@@ -11,7 +11,7 @@ let isInitialized = false;
 
 // Initialize extension
 chrome.runtime.onInstalled.addListener(async () => {
-    console.log('Auto Key Presser Pro installed');
+    console.log('GhostInput installed');
     await initializeTimers();
 });
 

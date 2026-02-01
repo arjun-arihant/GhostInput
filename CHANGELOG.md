@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [1.1.0] - 2026-02-01
 
+### ✨ Rebranded to GhostInput
+- **New Identity**: "Auto Key Presser Pro" is now **GhostInput**.
+- Updated all visuals, documentation, and metadata to reflect the new premium identity.
+
 ### ✨ Added
 - **Multi-Tab Support**: Actions can now be securely scoped to specific tabs.
 - **Redesigned Overlay**:
