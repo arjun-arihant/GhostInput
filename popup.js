@@ -40,6 +40,12 @@ const elements = {
     timeLimit: document.getElementById('timeLimit'),
 
     // Lists
+    currentTabLabel: document.getElementById('currentTabLabel'),
+    startAllBtn: document.getElementById('startAllBtn'),
+    stopAllBtn: document.getElementById('stopAllBtn'),
+    actionSearch: document.getElementById('actionSearch'),
+    clearSearch: document.getElementById('clearSearch'),
+    actionsSummary: document.getElementById('actionsSummary'),
     actionsList: document.getElementById('actionsList'),
     emptyState: document.getElementById('emptyState'),
     profilesList: document.getElementById('profilesList'),
@@ -90,6 +96,7 @@ let selectedModifiers = [];
 let editModifiers = [];
 let currentTabId = null;
 let currentTabTitle = null;
+let actionSearchTerm = '';
 
 // Initialize
 document.addEventListener('DOMContentLoaded', init);
@@ -99,6 +106,10 @@ async function init() {
     const tabInfo = await chrome.runtime.sendMessage({ type: 'GET_CURRENT_TAB' });
     currentTabId = tabInfo?.tabId;
     currentTabTitle = tabInfo?.tabTitle;
+
+    if (elements.currentTabLabel) {
+        elements.currentTabLabel.textContent = currentTabTitle || 'Current tab';
+    }
 
     await loadSettings();
     await loadActionsList();
@@ -143,6 +154,22 @@ function setupEventListeners() {
         elements.editRandomizeSettings.classList.toggle('hidden', !elements.editRandomize.checked);
     });
 
+    elements.actionSearch.addEventListener('input', () => {
+        actionSearchTerm = elements.actionSearch.value.trim().toLowerCase();
+        elements.clearSearch.classList.toggle('hidden', !actionSearchTerm);
+        loadActionsList();
+    });
+
+    elements.clearSearch.addEventListener('click', () => {
+        elements.actionSearch.value = '';
+        actionSearchTerm = '';
+        elements.clearSearch.classList.add('hidden');
+        loadActionsList();
+    });
+
+    elements.startAllBtn.addEventListener('click', () => handleBulkToggle(true));
+    elements.stopAllBtn.addEventListener('click', () => handleBulkToggle(false));
+
     // Form Submission
     elements.addActionForm.addEventListener('submit', handleAddAction);
 
@@ -166,6 +193,19 @@ function setupEventListeners() {
     // Close Modals on Backdrop Click
     document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
         backdrop.addEventListener('click', () => hideModal(backdrop.closest('.modal')));
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!event.target.closest('.tab-dropdown-wrapper')) {
+            closeAllDropdowns();
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeAllDropdowns();
+            document.querySelectorAll('.modal').forEach(modal => hideModal(modal));
+        }
     });
 }
 
@@ -222,9 +262,16 @@ async function handleAddAction(e) {
     const isKey = elements.actionType.value === 'key';
     const key = isKey ? elements.keySelect.value : null;
     const keyInfo = key ? getKeyInfo(key) : null;
+    const randomRange = normalizeRandomRange(
+        elements.randomize.checked,
+        elements.randomizeMin.value,
+        elements.randomizeMax.value,
+        elements.randomizeMin,
+        elements.randomizeMax
+    );
 
     // Determine Name
-    let name = elements.actionName.value;
+    let name = elements.actionName.value.trim();
     if (!name) {
         name = isKey ? `Press ${key}` : elements.mouseSelect.options[elements.mouseSelect.selectedIndex].text;
     }
@@ -242,8 +289,8 @@ async function handleAddAction(e) {
 
         // Randomization
         randomize: elements.randomize.checked,
-        randomizeMin: elements.randomize.checked ? parseInt(elements.randomizeMin.value || 0) : 0,
-        randomizeMax: elements.randomize.checked ? parseInt(elements.randomizeMax.value || 0) : 0,
+        randomizeMin: randomRange.min,
+        randomizeMax: randomRange.max,
 
         // Limits & Filters
         urlFilter: elements.urlFilter.value.trim() || null,
@@ -279,21 +326,51 @@ async function handleAddAction(e) {
 
 async function loadActionsList() {
     const actions = await getActions();
+    const filteredActions = actionSearchTerm
+        ? actions.filter(action => {
+            const meta = [
+                action.name,
+                action.key,
+                action.mouseAction,
+                action.urlFilter
+            ].filter(Boolean).join(' ').toLowerCase();
+            return meta.includes(actionSearchTerm);
+        })
+        : actions;
 
     if (actions.length === 0) {
         elements.emptyState.classList.remove('hidden');
+        elements.emptyState.querySelector('p').textContent = 'No active actions';
+        elements.emptyState.querySelector('span').textContent = 'Create one above to get started';
         elements.actionsList.innerHTML = '';
         elements.actionsList.appendChild(elements.emptyState);
+        elements.actionsSummary.textContent = '0 actions';
+        return;
+    }
+
+    if (filteredActions.length === 0) {
+        elements.emptyState.classList.remove('hidden');
+        elements.emptyState.querySelector('p').textContent = 'No matches found';
+        elements.emptyState.querySelector('span').textContent = 'Try a different search term.';
+        elements.actionsList.innerHTML = '';
+        elements.actionsList.appendChild(elements.emptyState);
+        elements.actionsSummary.textContent = `0 of ${actions.length}`;
         return;
     }
 
     elements.emptyState.classList.add('hidden');
+    elements.actionsSummary.textContent = actionSearchTerm
+        ? `${filteredActions.length} of ${actions.length}`
+        : `${actions.length} action${actions.length === 1 ? '' : 's'}`;
 
-    elements.actionsList.innerHTML = actions.map(action => {
+    elements.actionsList.innerHTML = filteredActions.map(action => {
         const instances = action.instances || {};
         const instanceEntries = Object.entries(instances);
         const activeCount = instanceEntries.filter(([, i]) => i.enabled).length;
         const isActiveOnCurrentTab = instances[currentTabId]?.enabled;
+        const statusLabel = isActiveOnCurrentTab
+            ? '<span class="status-pill active">Active here</span>'
+            : '<span class="status-pill">Inactive here</span>';
 
         // Dropdown for active tabs
         const tabDropdownHtml = activeCount > 0 ? `
@@ -325,6 +402,7 @@ async function loadActionsList() {
                 <div class="action-name">${escapeHtml(action.name)}</div>
                 <div class="action-meta">
                    <span>Every ${action.interval} ${getUnitLabel(action.timeUnit)}</span>
+                   ${statusLabel}
                    ${action.randomize ? `<span title="Randomized ±">🎲</span>` : ''}
                    ${tabDropdownHtml}
                 </div>
@@ -401,12 +479,6 @@ function attachActionListeners() {
         });
     });
 
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', () => {
-        document.querySelectorAll('.tab-dropdown-panel').forEach(p => p.classList.add('hidden'));
-        document.querySelectorAll('.tab-dropdown-btn').forEach(b => b.classList.remove('open'));
-    }, { once: true });
-
     // Remove from specific tab
     elements.actionsList.querySelectorAll('.tab-remove').forEach(btn => {
         btn.addEventListener('click', async (e) => {
@@ -479,6 +551,13 @@ async function handleEditAction() {
     const id = elements.editActionId.value;
     const isKey = elements.editActionType.value === 'key';
     const key = isKey ? elements.editKeySelect.value : null;
+    const randomRange = normalizeRandomRange(
+        elements.editRandomize.checked,
+        elements.editRandomizeMin.value,
+        elements.editRandomizeMax.value,
+        elements.editRandomizeMin,
+        elements.editRandomizeMax
+    );
 
     const updates = {
         name: elements.editActionName.value,
@@ -491,8 +570,8 @@ async function handleEditAction() {
         timeUnit: elements.editTimeUnit.value,
 
         randomize: elements.editRandomize.checked,
-        randomizeMin: elements.editRandomize.checked ? parseInt(elements.editRandomizeMin.value || 0) : 0,
-        randomizeMax: elements.editRandomize.checked ? parseInt(elements.editRandomizeMax.value || 0) : 0,
+        randomizeMin: randomRange.min,
+        randomizeMax: randomRange.max,
 
         urlFilter: elements.editUrlFilter.value.trim() || null,
         repeatLimit: elements.editRepeatLimit.value ? parseInt(elements.editRepeatLimit.value) : null,
@@ -540,6 +619,43 @@ function showToast(msg, type = 'success') {
     toast.textContent = msg;
     elements.toastContainer.appendChild(toast);
     setTimeout(() => toast.remove(), 3000);
+}
+
+function closeAllDropdowns() {
+    document.querySelectorAll('.tab-dropdown-panel').forEach(panel => panel.classList.add('hidden'));
+    document.querySelectorAll('.tab-dropdown-btn').forEach(button => button.classList.remove('open'));
+}
+
+function normalizeRandomRange(enabled, minValue, maxValue, minInput, maxInput) {
+    if (!enabled) return { min: 0, max: 0 };
+    let min = parseInt(minValue || 0);
+    let max = parseInt(maxValue || 0);
+    if (Number.isNaN(min)) min = 0;
+    if (Number.isNaN(max)) max = 0;
+
+    if (min > max) {
+        max = min;
+        if (maxInput) maxInput.value = max;
+        showToast('Randomize max adjusted to match min', 'warning');
+    }
+    return { min, max };
+}
+
+async function handleBulkToggle(enable) {
+    if (!currentTabId) {
+        showToast('No active tab detected', 'error');
+        return;
+    }
+    const actions = await getActions();
+    await Promise.all(actions.map(action => chrome.runtime.sendMessage({
+        type: 'TOGGLE_ACTION',
+        actionId: action.id,
+        enabled: enable,
+        targetTabId: currentTabId
+    })));
+    await updateGlobalToggleState();
+    await loadActionsList();
+    showToast(enable ? 'Running all actions on this tab' : 'Paused all actions on this tab');
 }
 
 // Settings
@@ -600,19 +716,6 @@ async function handleImport(e) {
 // Profiles (Simplified)
 async function loadProfilesList() {
     const profiles = await getProfiles();
-    elements.profilesList.innerHTML = profiles.length ? profiles.map(p => `
-        <div class="action-card">
-           <div class="action-details">
-              <div class="action-name">${escapeHtml(p.name)}</div>
-              <div class="action-meta">${p.actions.length} actions</div>
-           </div>
-           <button class="btn-primary" style="width: auto; padding: 6px 12px;" onclick="loadProfile('${p.id}')">Load</button>
-        </div>
-    `).join('') : '<p class="text-muted" style="text-align:center; padding: 20px;">No saved profiles</p>';
-
-    // Note: onclick inline requires global scope, which modules don't have. 
-    // I need to add listeners manually like in actions list.
-    // Re-rendering to fix this immediately below.
     renderProfiles(profiles);
 }
 
