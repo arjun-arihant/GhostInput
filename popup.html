@@ -58,10 +58,22 @@
 
       <!-- Actions Tab -->
       <section id="actions-tab" class="tab-panel active">
+        <div class="context-banner">
+          <div>
+            <p class="context-label">Current tab</p>
+            <p id="currentTabLabel" class="context-title">Loading…</p>
+          </div>
+          <div class="context-actions">
+            <button id="startAllBtn" class="btn-outline btn-small" type="button">Run all here</button>
+            <button id="stopAllBtn" class="btn-outline btn-small danger" type="button">Pause all here</button>
+          </div>
+        </div>
+
         <div class="card add-action-card">
           <form id="addActionForm">
             <div class="form-row">
-              <input type="text" id="actionName" class="input-text" placeholder="Action Name (e.g., Farm XP)" required>
+              <input type="text" id="actionName" class="input-text" placeholder="Action Name (e.g., Farm XP)">
+              <p class="helper-text">Leave blank to auto-name based on action type.</p>
             </div>
 
             <div class="form-grid">
@@ -182,7 +194,8 @@
             </div>
 
             <!-- Advanced Toggle -->
-            <button type="button" id="advancedToggle" class="btn-text-icon">
+            <button type="button" id="advancedToggle" class="btn-text-icon" aria-expanded="false"
+              aria-controls="advancedOptions">
               <span>Advanced Options</span>
               <svg viewBox="0 0 24 24" fill="none" class="icon-chevron" stroke="currentColor" stroke-width="2">
                 <polyline points="6 9 12 15 18 9" />
@@ -224,6 +237,7 @@
                   <span class="separator">or</span>
                   <input type="number" id="timeLimit" class="input-text" min="0" placeholder="Minutes">
                 </div>
+                <p class="helper-text">Use either repeats or minutes.</p>
               </div>
             </div>
 
@@ -235,6 +249,19 @@
               Add Action
             </button>
           </form>
+        </div>
+
+        <div class="actions-toolbar">
+          <div class="search-field">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" id="actionSearch" class="input-text" placeholder="Search actions">
+            <button type="button" id="clearSearch" class="btn-icon-sm btn-clear hidden"
+              aria-label="Clear search">×</button>
+          </div>
+          <div id="actionsSummary" class="actions-summary">0 actions</div>
         </div>
 
         <div id="actionsList" class="actions-list">

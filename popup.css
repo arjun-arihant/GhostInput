@@ -82,6 +82,12 @@ body {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
+button,
+input,
+select {
+  font-family: inherit;
+}
+
 /* ─────────────────────────────────────────────────────────────────────────────
    Layout 
    ───────────────────────────────────────────────────────────────────────────── */
@@ -248,6 +254,46 @@ h1 {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   Context Banner
+   ───────────────────────────────────────────────────────────────────────────── */
+.context-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.context-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.context-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  max-width: 190px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.context-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
    Form Elements 
    ───────────────────────────────────────────────────────────────────────────── */
 .input-text,
@@ -308,6 +354,12 @@ select.input-select {
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.03em;
+}
+
+.helper-text {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 6px;
 }
 
 .input-group {
@@ -398,6 +450,22 @@ select.input-select {
 .btn-outline:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.btn-outline.danger {
+  color: var(--danger);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.btn-outline.danger:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.btn-small {
+  padding: 6px 10px;
+  font-size: 11px;
 }
 
 .btn-text-icon {
@@ -559,6 +627,12 @@ select.input-select {
   background: rgba(239, 68, 68, 0.12);
 }
 
+.btn-clear {
+  width: 26px;
+  height: 26px;
+  font-size: 16px;
+}
+
 /* ─────────────────────────────────────────────────────────────────────────────
    Switch Toggle 
    ───────────────────────────────────────────────────────────────────────────── */
@@ -638,6 +712,40 @@ input:checked+.slider:before {
   gap: 10px;
 }
 
+.actions-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  position: relative;
+}
+
+.search-field .input-text {
+  padding-left: 32px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+}
+
+.actions-summary {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
 .action-card {
   background: var(--bg-secondary);
   border-radius: var(--radius-md);
@@ -697,12 +805,29 @@ input:checked+.slider:before {
 .action-meta {
   font-size: 11px;
   color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
 .action-controls {
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+.status-pill {
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 10px;
+  background: var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.status-pill.active {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success);
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -1015,6 +1140,10 @@ input:checked+.slider:before {
 
 .toast.error {
   border-left: 3px solid var(--danger);
+}
+
+.toast.warning {
+  border-left: 3px solid var(--warning);
 }
 
 @keyframes toastSlide {
